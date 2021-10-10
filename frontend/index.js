@@ -1,6 +1,6 @@
 // declare any global variables
-let currentUser;
-let activeProject;
+let currentUser = null;
+let activeProject = null;
 // Page Elements
 let userModal;
 let btn;
@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 })
 
 function initialize() {
-	if(currentUser = null) {
+	if(currentUser === null) {
 		showUserModal();
 	}
 }
