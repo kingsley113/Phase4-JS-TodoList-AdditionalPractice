@@ -104,7 +104,6 @@ function populateUserFormList() {
   const users = fetchUsers();
 
   // create option elements
-
   for (const user of users) {
     const option = document.createElement("option");
     option.id = user.id;
@@ -130,6 +129,33 @@ function handleUserFormSubmit(event) {
     // TODO: submit selected existing user to API
     loadExistingUser(document.getElementById("existing-users").value);
   }
+}
+
+function createNewUser(username) {
+  const formData = {
+    username: username,
+  };
+
+  const configurationObject = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application-json",
+      accept: "application/json",
+    },
+    Body: JSON.stringify({ response: formData }),
+  };
+
+  fetch(`http://localhost:3000/users/new/${username}`, configurationObject)
+    .then((response) => {
+      return response.json();
+    })
+    .then((object) => {
+      setCurrentUser(object);
+    });
+}
+
+function setCurrentUser(userObject) {
+  // TODO: Implement this function
 }
 /* 
 Things we need to do:
