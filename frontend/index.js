@@ -1,5 +1,9 @@
 // declare any global variables
 let currentUser;
+// Page Elements
+let userModal;
+let btn;
+let closeBtn;
 
 // declare classes
 class Task {
@@ -33,6 +37,33 @@ class User {
   name() {
     return this._name;
   }
+}
+
+// Identify page elements
+document.addEventListener("DOMContentLoaded", (event) => {
+	userModal = document.getElementById("user-modal");
+	btn = document.getElementById("open-modal")
+	closeBtn = document.getElementById("close-user-modal")
+
+	initialize();	
+})
+
+function initialize() {
+	// TODO: move this probably to a separate function and trigger if currentUser = null
+	btn.addEventListener("click", () => {
+		userModal.style.display = "block";
+	})
+		
+	closeBtn.addEventListener("click", () => {
+		userModal.style.display = "none";
+		console.log("closeBtn clicked")
+	})
+
+	window.addEventListener("click", (event) => {
+		if (event.target == userModal) {
+			userModal.style.display = "none";
+		};
+	})
 }
 
 /* 
