@@ -1,4 +1,5 @@
 // declare any global variables
+let currentUser;
 
 // declare classes
 class Task {
@@ -13,22 +14,27 @@ class Task {
 }
 
 class Project {
-  constructor(name, description, user) {
+  constructor(name, description, user, tasks) {
     this.name = name;
     this.description = description;
     this.user = user;
+    this.tasks = tasks;
   }
+
+  // function for # of incomplete tasks
 }
 
 class User {
-  constructor(name) {
+  constructor(name, projects) {
     this._name = name;
+    this.projects = projects;
   }
 
   name() {
     return this._name;
   }
 }
+
 /* 
 Things we need to do:
 submit new task
@@ -43,6 +49,7 @@ delete task
 set task priority
 
 fetch user set of data
+promp for user to enter new name or select from existing users
 
 shortcut buttons on each task line:
 	mark complete
