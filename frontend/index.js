@@ -1,5 +1,6 @@
 // declare any global variables
 let currentUser;
+let activeProject;
 // Page Elements
 let userModal;
 let btn;
@@ -64,10 +65,12 @@ function initialize() {
 }
 
 function showUserModal() {
+	// TODO: make this trigger without button, keep button for debug only
 	btn.addEventListener("click", () => {
 		userModal.style.display = "block";
 	})
 		
+	// TODO: User shouldnt be able to close window without entering name or selecting user.
 	closeBtn.addEventListener("click", () => {
 		userModal.style.display = "none";
 		console.log("closeBtn clicked")
