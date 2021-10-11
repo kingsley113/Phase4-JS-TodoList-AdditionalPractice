@@ -82,20 +82,6 @@ function initialize() {
 }
 
 function showUserModal() {
-  // TODO: User shouldnt be able to close window without entering name or selecting user.
-  // closeBtn.addEventListener("click", () => {
-  //   userModal.style.display = "none";
-  //   console.log("closeBtn clicked");
-  // });
-
-  // window.addEventListener("click", (event) => {
-  //   if (event.target == userModal) {
-  //     userModal.style.display = "none";
-  //   }
-  // });
-
-  // userModal.style.display = "block";
-  // populateUserFormList();
   fetchUsers();
   const userForm = document.getElementById("user-form");
   userForm.addEventListener("submit", (event) => {
@@ -119,9 +105,6 @@ function fetchUsers() {
 }
 
 function populateUserFormList(users) {
-  // fetch existing users
-  // users = fetchUsers();
-  // console.log(users);
   // create option elements
   for (const user of users) {
     const option = document.createElement("option");
@@ -194,9 +177,9 @@ function setCurrentUser(userObject) {
 }
 
 function updateFooter() {
-  // TODO: low on the list but update the current user shown on the footer
-  document.getElementById("current-user-footer-label").innerText =
-    currentUser.name();
+  document.getElementById(
+    "current-user-footer-label"
+  ).innerText = `Current User: ${currentUser.name()}`;
 }
 
 function hideUserModal() {
@@ -214,7 +197,6 @@ create new project
 delete task
 set task priority
 
-fetch user set of data
 
 shortcut buttons on each task line:
 	mark complete
