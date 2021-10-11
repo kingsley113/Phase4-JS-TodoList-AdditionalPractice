@@ -11,7 +11,7 @@ class UsersController < ApplicationController
 
 		if user.save
 			# render json: UserSerializer.new(user).full_user_serialized_json
-			render json: user
+			render json: user, include:[:projects]
 		else
 			render json: user.errors, status: :unprocessable_entity 
 		end
@@ -20,7 +20,7 @@ class UsersController < ApplicationController
 	def show
 		user = User.find(params[:id])
 		# render json: UserSerializer.new(user).full_user_serialized_json
-		render json: user
+		render json: user, include:[:projects]
 	end
 
 	private
