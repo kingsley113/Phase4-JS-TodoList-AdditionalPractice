@@ -35,9 +35,11 @@ class Project {
   // function for # of incomplete tasks
   incompleteTasks() {
     let incompleteTaskArr = [];
-    for (const task of this.tasks) {
-      if (task.complete === false) {
-        incompleteTaskArr.push(task);
+    if (this.tasks) {
+      for (const task of this.tasks) {
+        if (task.complete === false) {
+          incompleteTaskArr.push(task);
+        }
       }
     }
     return incompleteTaskArr;
@@ -175,10 +177,6 @@ function setCurrentUser(userObject) {
     buildProjects(userObject.projects),
     userObject.id
   );
-  // currentUser.setName(userObject.username);
-  // currentUser.
-  // currentUser.projects = buildProjects(userObject.projects);
-  // TODO: Will probably need to call a 'build projects' function or something on this to create project instances
 
   updateFooter();
   renderProjectList();
@@ -206,23 +204,43 @@ function buildProjects(projArray) {
     );
     projects.push(proj);
   }
-  console.log(projects);
   return projects;
 }
 
 function renderProjectList() {
   const projectList = document.getElementById("project-sidebar-list");
 
-  console.log(currentUser.projects);
   for (const project of currentUser.projects) {
-    let item = document.createElement("li");
-    item.id = `project-${project.id}`;
-    item.classList.add("project-li");
-    item.innerText = project.name;
-
-    projectList.appendChild(item);
+    projectList.appendChild(buildProjectLiElement(project));
   }
 }
+
+function buildProjectLiElement(project) {
+  let item = document.createElement("li");
+  let text = document.createElement("p");
+  let unfinishedTaskText = document.createElement("span");
+
+  item.id = `project-${project.id}`;
+  item.classList.add("project-li");
+
+  text.innerText = project.name;
+  item.appendChild(text);
+
+  unfinishedTaskText.innerText = project.incompleteTasks().length;
+  item.appendChild(unfinishedTaskText);
+
+  item.addEventListener("click", () => {
+    setActiveProject(project);
+  });
+  return item;
+}
+
+function setActiveProject(project) {
+  activeProject = project;
+  renderTaskList(project);
+}
+
+function renderTaskList(projectObject) {}
 /* 
 Things we need to do:
 submit new task
