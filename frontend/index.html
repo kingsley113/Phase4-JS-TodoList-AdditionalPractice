@@ -7,41 +7,44 @@
     <title>Honey Badger Task Management</title>
 
     <script src="index.js"></script>
-		
+
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-		<main>
-			<div class="project-bar">
-				<p>test from project bar div</p>
-			</div>
-			<div class="task-area">
-				<div class="top-menu-bar">
-					<p>this will be where the 'add task' line goes</p>
-				</div>
-				<div class="task-list">
-					<p>tihs will be the list of tasks and all that goodness</p>
-				</div>
-			</div>
-		</main>
+    <main>
+      <div class="project-bar">
+        <p>test from project bar div</p>
+        <ul class="project-list" id="project-sidebar-list"></ul>
+      </div>
+      <div class="task-area">
+        <div class="top-menu-bar">
+          <p>this will be where the 'add task' line goes</p>
+        </div>
+        <div class="task-list">
+          <p>tihs will be the list of tasks and all that goodness</p>
+        </div>
+      </div>
+    </main>
 
-		<footer class="btm-menu-bar">
-			<p id="current-user-footer-label">No Loaded User</p>
-			<button id="open-modal">Open Modal Test</button>
-		<footer/>
+    <div class="modal" id="user-modal">
+      <div class="modal-content">
+        <form id="user-form">
+          <input
+            type="text"
+            id="username-input"
+            placeholder="Enter User Name"
+          />
+          <select name="existing-users" id="existing-users"></select>
+          <input type="submit" value="Create or Load User" />
+        </form>
+        User Modal Text Here!!!
+        <!-- <span class="close" id="close-user-modal">&times;</span> -->
+      </div>
+    </div>
 
-		<div class="modal" id="user-modal">
-			<div class="modal-content">
-				<form id="user-form">
-					<input type="text" id="username-input" placeholder="Enter User Name">
-					<select name="existing-users" id="existing-users">
-					</select>
-					<input type="submit" value="Create or Load User">
-				</form>
-				User Modal Text Here!!!
-				<!-- <span class="close" id="close-user-modal">&times;</span> -->
-			</div>
-		</div>
-
+    <footer class="btm-menu-bar">
+      <p id="current-user-footer-label">No Loaded User</p>
+      <button id="open-modal">Open Modal Test</button>
+    </footer>
   </body>
 </html>

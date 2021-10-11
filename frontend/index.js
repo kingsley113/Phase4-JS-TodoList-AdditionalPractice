@@ -12,7 +12,8 @@ let users = [];
 
 // declare classes
 class Task {
-  constructor(name, description, project, priority, dueDate, complete) {
+  constructor(name, description, project, priority, dueDate, complete, id) {
+    this.id = id;
     this.name = name;
     this.description = description;
     this.project = project;
@@ -23,7 +24,8 @@ class Task {
 }
 
 class Project {
-  constructor(name, description, user, tasks) {
+  constructor(name, description, user, tasks, id) {
+    this.id = id;
     this.name = name;
     this.description = description;
     this.user = user;
@@ -43,18 +45,19 @@ class Project {
 }
 
 class User {
-  constructor(name, projects) {
-    this._name = name;
+  constructor(name, projects, id) {
+    this.id = id;
+    this.name = name;
     this.projects = projects;
   }
 
-  name() {
-    return this._name;
-  }
+  // name() {
+  //   return this._name;
+  // }
 
-  setName(name) {
-    this._name = name;
-  }
+  // setName(name) {
+  //   this._name = name;
+  // }
 }
 
 // Identify page elements
@@ -167,23 +170,58 @@ function loadExistingUser(id) {
 }
 
 function setCurrentUser(userObject) {
-  console.log(userObject);
-  currentUser = new User();
-  currentUser.setName(userObject.username);
-  currentUser.projects = userObject.projects;
+  currentUser = new User(
+    userObject.username,
+    buildProjects(userObject.projects),
+    userObject.id
+  );
+  // currentUser.setName(userObject.username);
+  // currentUser.
+  // currentUser.projects = buildProjects(userObject.projects);
   // TODO: Will probably need to call a 'build projects' function or something on this to create project instances
 
   updateFooter();
+  renderProjectList();
 }
 
 function updateFooter() {
   document.getElementById(
     "current-user-footer-label"
-  ).innerText = `Current User: ${currentUser.name()}`;
+  ).innerText = `Current User: ${currentUser.name}`;
 }
 
 function hideUserModal() {
   userModal.style.display = "none";
+}
+
+function buildProjects(projArray) {
+  let projects = [];
+  for (const project of projArray) {
+    let proj = new Project(
+      project.name,
+      project.description,
+      project.user_id,
+      project.tasks,
+      project.id
+    );
+    projects.push(proj);
+  }
+  console.log(projects);
+  return projects;
+}
+
+function renderProjectList() {
+  const projectList = document.getElementById("project-sidebar-list");
+
+  console.log(currentUser.projects);
+  for (const project of currentUser.projects) {
+    let item = document.createElement("li");
+    item.id = `project-${project.id}`;
+    item.classList.add("project-li");
+    item.innerText = project.name;
+
+    projectList.appendChild(item);
+  }
 }
 /* 
 Things we need to do:
