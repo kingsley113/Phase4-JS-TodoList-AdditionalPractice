@@ -1,5 +1,5 @@
 class Task < ApplicationRecord
 	belongs_to :project
 
-	validates :name precense: true
+	validates :name, presence: true
 end
