@@ -76,3 +76,13 @@ main {
   color: springgreen;
   cursor: pointer;
 }
+
+/* Task Modal */
+.edit-button {
+  float: right;
+  margin-right: 20px;
+}
+
+.task-item {
+  font-size: 16pt;
+}

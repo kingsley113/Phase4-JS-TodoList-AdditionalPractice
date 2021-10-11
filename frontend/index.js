@@ -237,10 +237,66 @@ function buildProjectLiElement(project) {
 
 function setActiveProject(project) {
   activeProject = project;
-  renderTaskList(project);
+  fetchProjectTasks.call(activeProject);
+  // renderTaskList(activeProject);
 }
 
-function renderTaskList(projectObject) {}
+function renderTaskList(taskArr) {
+  // remove existing task elements
+  const existTasks = document.querySelectorAll(".task-item");
+  for (const taskEl of existTasks) {
+    taskEl.remove();
+  }
+  // console.log(projectObject);
+  const taskList = document.getElementById("task-items-list");
+  // const tasks = fetchProjectTasks.call(activeProject);
+  console.log(taskArr);
+  for (const task of taskArr) {
+    taskList.appendChild(buildTaskElement(task));
+  }
+}
+
+function fetchProjectTasks() {
+  fetch(`http://localhost:3000/projects/${this.id}`)
+    .then((response) => {
+      return response.json();
+    })
+    .then((object) => {
+      // console.log("from fetch: " + object.tasks);
+      renderTaskList(object.tasks);
+    });
+}
+
+function buildTaskElement(task) {
+  // create li element
+  const listItem = document.createElement("li");
+  listItem.classList.add("task-item");
+  listItem.id = `task-${task.id}`;
+  listItem.addEventListener("click", () => {
+    console.log("you clicked a task!");
+  });
+  // create name text element
+  const text = document.createElement("span");
+  text.classList.add("task-text");
+  text.innerText = task.name;
+  listItem.appendChild(text);
+  // create edit btn element
+  const editBtn = document.createElement("button");
+  editBtn.classList.add("edit-button");
+  editBtn.innerHTML = "Edit Task";
+  listItem.appendChild(editBtn);
+  editBtn.addEventListener("click", () => {
+    showEditModal(task);
+  });
+  // create complete btn element
+  // append child elements
+  // return assembled li element
+  return listItem;
+}
+
+function showEditModal(taskObject) {
+  console.log("this will be the edit modal for: " + taskObject.name);
+}
 /* 
 Things we need to do:
 submit new task
