@@ -223,7 +223,7 @@ function renderProjectList() {
 function buildProjectLiElement(project) {
   let item = document.createElement("li");
   let text = document.createElement("p");
-  let unfinishedTaskText = document.createElement("span");
+  // let unfinishedTaskText = document.createElement("span");
 
   item.id = `project-${project.id}`;
   item.classList.add("project-li");
@@ -231,8 +231,9 @@ function buildProjectLiElement(project) {
   text.innerText = project.name;
   item.appendChild(text);
 
-  unfinishedTaskText.innerText = project.incompleteTasks().length;
-  item.appendChild(unfinishedTaskText);
+  // unfinishedTaskText.innerText = project.incompleteTasks().length;
+  // console.log(project.incompleteTasks().length);
+  // item.appendChild(unfinishedTaskText);
 
   item.addEventListener("click", () => {
     setActiveProject(project);
@@ -248,6 +249,7 @@ function setActiveProject(project) {
 
 function renderTaskList(taskArr) {
   // remove existing task elements
+  // console.log(taskArr);
   const existTasks = document.querySelectorAll(".task-item");
   for (const taskEl of existTasks) {
     taskEl.remove();
@@ -267,8 +269,11 @@ function fetchProjectTasks() {
       return response.json();
     })
     .then((object) => {
-      // console.log("from fetch: " + object.tasks);
+      // console.log("from fetch: " + object.tasks[0]);
       renderTaskList(object.tasks);
+      // TODO: need to tie tasks to project, currently this relationship is only on the backend DB
+      this.tasks = object.tasks;
+      console.log(this);
     });
 }
 
@@ -323,15 +328,10 @@ function showEditModal(taskObject) {
 }
 
 function submitTaskToAPI(task) {
-  // TODO: implement this
-  // console.log(task);
-
-  // update API object in database
   const formData = {
     id: task.id,
     name: task.name,
     description: task.description,
-    // project_id: task.project.id,
     priority: task.priority,
     dueDate: task.dueDate,
     complete: task.complete,
@@ -351,10 +351,7 @@ function submitTaskToAPI(task) {
       return response.json();
     })
     .then((object) => {
-      console.log(object);
-      // updateTaskItem(object)
-      // console.log(activeProject);
-      // renderTaskList(activeProject.tasks);
+      renderTaskList(activeProject.tasks);
       closeTaskModal();
     });
 }
@@ -366,14 +363,8 @@ function closeTaskModal() {
 /* 
 Things we need to do:
 submit new task
-fetch list of tasks
-fetch list of projects
-display list of tasks
-show modal window when editing task
-save edited task
 create new project
 delete task
-set task priority
 
 
 shortcut buttons on each task line:
