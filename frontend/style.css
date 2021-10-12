@@ -85,6 +85,11 @@ main {
   margin-right: 20px;
 }
 
+.compl-button {
+  float: right;
+  margin-right: 10px;
+}
+
 .task-item {
   font-size: 16pt;
 }
@@ -96,4 +101,8 @@ main {
   /* flex-direction: column; */
   text-align: center;
   /* height: 100%; */
+}
+
+.complete {
+  text-decoration: line-through;
 }

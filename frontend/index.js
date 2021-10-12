@@ -307,6 +307,13 @@ function buildTaskElement(task) {
   const text = document.createElement("span");
   text.classList.add("task-text");
   text.innerText = task.name;
+
+  if (task.complete === false) {
+    text.classList.remove("complete");
+  } else {
+    text.classList.add("complete");
+  }
+
   listItem.appendChild(text);
   // create edit btn element
   const editBtn = document.createElement("button");
@@ -317,6 +324,13 @@ function buildTaskElement(task) {
     showEditModal(task);
   });
   // TODO: create complete btn element
+  const completeBtn = document.createElement("button");
+  completeBtn.classList.add("compl-button");
+  completeBtn.innerHTML = "Complete";
+  listItem.appendChild(completeBtn);
+  completeBtn.addEventListener("click", () => {
+    completeTask(task, text);
+  });
   // TODO: append child elements
   // return assembled li element
   return listItem;
@@ -343,6 +357,8 @@ function showEditModal(taskObject) {
     // Submit fetch request to update object on backend
     submitTaskToAPI(taskObject);
   });
+
+  // TODO: Add cancel button?
 }
 
 function submitTaskToAPI(task) {
@@ -396,7 +412,7 @@ function saveNewTaskToAPI(task) {
     // dueDate: task.dueDate,
     complete: task.complete,
   };
-  console.log(formData);
+  // console.log(formData);
   const configurationObject = {
     method: "POST",
     headers: {
@@ -411,9 +427,23 @@ function saveNewTaskToAPI(task) {
       response.json();
     })
     .then((object) => {
-      console.log(object);
+      // console.log(object);
       renderTaskList(activeProject.tasks);
     });
+}
+
+function completeTask(task, text) {
+  if (task.complete === false) {
+    task.complete = true;
+    text.classList.add("complete");
+  } else {
+    task.complete = false;
+    text.classList.remove("complete");
+  }
+  // task.complete = true;
+  // update on API
+  console.log(task);
+  submitTaskToAPI(task);
 }
 /* 
 Things we need to do:
