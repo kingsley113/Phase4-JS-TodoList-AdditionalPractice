@@ -82,12 +82,17 @@ main {
 /* Task Modal */
 .edit-button {
   float: right;
-  margin-right: 20px;
+  margin-right: 10px;
 }
 
 .compl-button {
   float: right;
   margin-right: 10px;
+}
+
+.del-button {
+  float: right;
+  margin-right: 20px;
 }
 
 .task-item {

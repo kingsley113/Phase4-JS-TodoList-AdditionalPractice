@@ -315,6 +315,16 @@ function buildTaskElement(task) {
   }
 
   listItem.appendChild(text);
+
+  // Create delete task button
+  const deleteBtn = document.createElement("button");
+  deleteBtn.classList.add("del-button");
+  deleteBtn.innerHTML = "Delete";
+  listItem.appendChild(deleteBtn);
+  deleteBtn.addEventListener("click", () => {
+    deleteTask(task);
+  });
+
   // create edit btn element
   const editBtn = document.createElement("button");
   editBtn.classList.add("edit-button");
@@ -323,7 +333,8 @@ function buildTaskElement(task) {
   editBtn.addEventListener("click", () => {
     showEditModal(task);
   });
-  // TODO: create complete btn element
+
+  // Create complete task button
   const completeBtn = document.createElement("button");
   completeBtn.classList.add("compl-button");
   completeBtn.innerHTML = "Complete";
@@ -331,7 +342,7 @@ function buildTaskElement(task) {
   completeBtn.addEventListener("click", () => {
     completeTask(task, text);
   });
-  // TODO: append child elements
+
   // return assembled li element
   return listItem;
 }
@@ -444,6 +455,13 @@ function completeTask(task, text) {
   // update on API
   console.log(task);
   submitTaskToAPI(task);
+}
+
+function deleteTask(task) {
+  // TODO:
+  // delete element from JS
+  // delete element from API
+  // re-render list after fetch to update
 }
 /* 
 Things we need to do:
