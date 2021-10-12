@@ -13,7 +13,15 @@ let users = [];
 
 // declare classes
 class Task {
-  constructor(name, description, project, priority, dueDate, complete, id) {
+  constructor(
+    name,
+    description,
+    project = activeProject,
+    priority = "Low",
+    dueDate,
+    complete = false,
+    id
+  ) {
     this.id = id;
     this.name = name;
     this.description = description;
@@ -74,6 +82,10 @@ document.addEventListener("DOMContentLoaded", (event) => {
   userList = document.getElementById("existing-users");
   username = document.getElementById("username-input");
 
+  // Task form elements
+  taskForm = document.getElementById("new-task-form");
+  taskName = document.getElementById("new-task-name");
+
   initialize();
 });
 
@@ -87,6 +99,12 @@ function initialize() {
   //   userModal.style.display = "block";
   //   showUserModal();
   // });
+
+  taskForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    // console.log(taskName.value);
+    createNewTask(taskName.value);
+  });
 }
 
 function showUserModal() {
@@ -346,6 +364,7 @@ function submitTaskToAPI(task) {
     body: JSON.stringify({ task: formData }),
   };
 
+  // TODO: bug here with patch request
   fetch(`http://localhost:3000/tasks/${task.id}`, configurationObject)
     .then((response) => {
       return response.json();
@@ -360,9 +379,44 @@ function closeTaskModal() {
   taskModal.style.display = "none";
 }
 
+function createNewTask(name) {
+  const task = new Task(name);
+  task.project = activeProject;
+  activeProject.tasks.push(task);
+
+  saveNewTaskToAPI(task);
+}
+
+function saveNewTaskToAPI(task) {
+  const formData = {
+    name: task.name,
+    // description: task.description,
+    priority: task.priority,
+    project_id: activeProject.id,
+    // dueDate: task.dueDate,
+    complete: task.complete,
+  };
+  console.log(formData);
+  const configurationObject = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({ task: formData }),
+  };
+
+  fetch(`http://localhost:3000/tasks`, configurationObject)
+    .then((response) => {
+      response.json();
+    })
+    .then((object) => {
+      console.log(object);
+      renderTaskList(activeProject.tasks);
+    });
+}
 /* 
 Things we need to do:
-submit new task
 create new project
 delete task
 
@@ -375,3 +429,4 @@ shortcut buttons on each task line:
 
 // TODO:
 // stop user list from duplicating rows when switching users
+// getting 500 server error if editing task twice without reloading page

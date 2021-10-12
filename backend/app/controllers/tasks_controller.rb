@@ -2,6 +2,15 @@ class TasksController < ApplicationController
 
 	# index
 	# create
+	def create
+		task = Task.new(task_params)
+		# byebug
+		if task.save
+			render json: task
+		else
+			render json: task.errors, status: :unprocessable_entity
+		end
+	end
 	# show
 	# update
 	def update
