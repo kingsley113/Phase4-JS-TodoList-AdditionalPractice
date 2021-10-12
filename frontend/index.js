@@ -3,6 +3,7 @@ let currentUser = null;
 let activeProject = null;
 // Page Elements
 let userModal;
+let taskModal;
 let btn;
 let closeBtn;
 // User Form
@@ -65,6 +66,7 @@ class User {
 // Identify page elements
 document.addEventListener("DOMContentLoaded", (event) => {
   userModal = document.getElementById("user-modal");
+  taskModal = document.getElementById("task-modal");
   btn = document.getElementById("open-modal");
   // closeBtn = document.getElementById("close-user-modal");
 
@@ -76,17 +78,20 @@ document.addEventListener("DOMContentLoaded", (event) => {
 });
 
 function initialize() {
-  // if (currentUser === null) {
-  //   showUserModal();
-  // }
-  // TODO: make this trigger without button, keep button for debug only
-  btn.addEventListener("click", () => {
-    userModal.style.display = "block";
+  console.log(currentUser);
+  if (currentUser === null) {
     showUserModal();
-  });
+  }
+  // TODO: make this trigger without button, keep button for debug only
+  // btn.addEventListener("click", () => {
+  //   userModal.style.display = "block";
+  //   showUserModal();
+  // });
 }
 
 function showUserModal() {
+  userModal.style.display = "block";
+
   fetchUsers();
   const userForm = document.getElementById("user-form");
   userForm.addEventListener("submit", (event) => {
@@ -95,7 +100,6 @@ function showUserModal() {
 }
 
 function fetchUsers() {
-  // TODO: setup fetch function
   fetch(`http://localhost:3000/users`)
     .then((response) => {
       return response.json();
@@ -106,7 +110,6 @@ function fetchUsers() {
     .catch((error) => {
       alert("woops, honey badger didnt give a s$!& and caused an error");
     });
-  // TODO: setup API route to return only username, id,
 }
 
 function populateUserFormList(users) {
@@ -124,14 +127,14 @@ function populateUserFormList(users) {
 
 function handleUserFormSubmit(event) {
   event.preventDefault();
-  console.log(username.value);
+  // console.log(username.value);
   if (username.value !== "") {
-    console.log("creating a new user");
+    // console.log("creating a new user");
     createNewUser(username.value);
   } else {
-    console.log(
-      `loading user ${document.getElementById("existing-users").value}`
-    );
+    // console.log(
+    // `loading user ${document.getElementById("existing-users").value}`
+    // );
     loadExistingUser(document.getElementById("existing-users").value);
   }
 }
@@ -180,6 +183,8 @@ function setCurrentUser(userObject) {
 
   updateFooter();
   renderProjectList();
+  // console.log(currentUser.projects[0]);
+  setActiveProject(currentUser.projects[0]);
 }
 
 function updateFooter() {
@@ -250,7 +255,7 @@ function renderTaskList(taskArr) {
   // console.log(projectObject);
   const taskList = document.getElementById("task-items-list");
   // const tasks = fetchProjectTasks.call(activeProject);
-  console.log(taskArr);
+  // console.log(taskArr);
   for (const task of taskArr) {
     taskList.appendChild(buildTaskElement(task));
   }
@@ -273,7 +278,7 @@ function buildTaskElement(task) {
   listItem.classList.add("task-item");
   listItem.id = `task-${task.id}`;
   listItem.addEventListener("click", () => {
-    console.log("you clicked a task!");
+    // console.log("you clicked a task!");
   });
   // create name text element
   const text = document.createElement("span");
@@ -288,15 +293,76 @@ function buildTaskElement(task) {
   editBtn.addEventListener("click", () => {
     showEditModal(task);
   });
-  // create complete btn element
-  // append child elements
+  // TODO: create complete btn element
+  // TODO: append child elements
   // return assembled li element
   return listItem;
 }
 
 function showEditModal(taskObject) {
-  console.log("this will be the edit modal for: " + taskObject.name);
+  // Populate edit form with existing data
+  let taskName = document.getElementById("task-name");
+  let taskDesc = document.getElementById("task-desc");
+  let taskPriority = document.getElementById("task-priority");
+  taskName.value = taskObject.name;
+  taskDesc.innerText = taskObject.description;
+  taskPriority.value = taskObject.priority;
+  // Show the modal window
+  taskModal.style.display = "block";
+  const taskForm = document.getElementById("edit-task-form");
+  // Add event listener for form
+  taskForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    // update local task object
+    taskObject.name = taskName.value;
+    taskObject.description = taskDesc.value;
+    taskObject.priority = taskPriority.value;
+    // Submit fetch request to update object on backend
+    submitTaskToAPI(taskObject);
+  });
 }
+
+function submitTaskToAPI(task) {
+  // TODO: implement this
+  // console.log(task);
+
+  // update API object in database
+  const formData = {
+    id: task.id,
+    name: task.name,
+    description: task.description,
+    // project_id: task.project.id,
+    priority: task.priority,
+    dueDate: task.dueDate,
+    complete: task.complete,
+  };
+
+  const configurationObject = {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({ task: formData }),
+  };
+
+  fetch(`http://localhost:3000/tasks/${task.id}`, configurationObject)
+    .then((response) => {
+      return response.json();
+    })
+    .then((object) => {
+      console.log(object);
+      // updateTaskItem(object)
+      // console.log(activeProject);
+      // renderTaskList(activeProject.tasks);
+      closeTaskModal();
+    });
+}
+
+function closeTaskModal() {
+  taskModal.style.display = "none";
+}
+
 /* 
 Things we need to do:
 submit new task

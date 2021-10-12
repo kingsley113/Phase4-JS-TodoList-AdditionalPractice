@@ -43,6 +43,34 @@
       </div>
     </div>
 
+    <div class="modal" id="task-modal">
+      <div class="modal-content">
+        <form id="edit-task-form">
+          <label for="task-name-field">Task Name: </label>
+          <input
+            id="task-name"
+            placeholder="Task Name"
+            name="task-name-field"
+          /><br />
+          <label for="task-desc-field">Description: </label>
+          <textarea id="task-desc" name="task-desc-field" rows="4" cols="40">
+						Description
+					</textarea
+          >
+          <br />
+          <label for="priority-input">Priority: </label>
+          <select name="priority-input" id="task-priority">
+            <option>Low</option>
+            <option>Medium</option>
+            <option>High</option>
+            <option>Urgent</option>
+            <option>Critical</option>
+          </select>
+          <br />
+          <input type="submit" value="Save Changes" />
+        </form>
+      </div>
+    </div>
     <footer class="btm-menu-bar">
       <p id="current-user-footer-label">No Loaded User</p>
       <button id="open-modal">Open Modal Test</button>
