@@ -264,7 +264,7 @@ function renderProjectList() {
 
 function buildProjectLiElement(project) {
   let item = document.createElement("li");
-  let text = document.createElement("p");
+  let text = document.createElement("h3");
   // let unfinishedTaskText = document.createElement("span");
 
   item.id = `project-${project.id}`;

@@ -12,6 +12,7 @@ main {
   flex: 1;
 }
 
+/* Project List */
 .project-bar {
   width: 300px;
   display: flex;
@@ -25,6 +26,11 @@ main {
   /* padding: 0px 0px; */
 }
 
+.project-list {
+  list-style-type: none;
+}
+
+/* Tasks */
 .task-area {
   display: flex;
   flex-direction: column;
