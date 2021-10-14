@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 });
 
 function initialize() {
-  console.log(currentUser);
+  // console.log(currentUser);
   if (currentUser === null) {
     showUserModal();
   }
@@ -291,7 +291,7 @@ function fetchProjectTasks() {
       renderTaskList(object.tasks);
       // TODO: need to tie tasks to project, currently this relationship is only on the backend DB
       this.tasks = object.tasks;
-      console.log(this);
+      // console.log(this);
     });
 }
 
@@ -435,10 +435,10 @@ function saveNewTaskToAPI(task) {
 
   fetch(`http://localhost:3000/tasks`, configurationObject)
     .then((response) => {
-      response.json();
+      return response.json();
     })
     .then((object) => {
-      // console.log(object);
+      task.id = object.id;
       renderTaskList(activeProject.tasks);
     });
 }
@@ -453,26 +453,56 @@ function completeTask(task, text) {
   }
   // task.complete = true;
   // update on API
-  console.log(task);
+  // console.log(task);
   submitTaskToAPI(task);
 }
 
 function deleteTask(task) {
   // TODO:
-  // delete element from JS
   // delete element from API
-  // re-render list after fetch to update
+  const formData = {
+    name: task.name,
+    id: task.id,
+  };
+
+  const configurationObject = {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({ task: formData }),
+  };
+
+  fetch(`http://localhost:3000/tasks/${task.id}`, configurationObject)
+    .then((response) => {
+      // TODO:check for bug here
+      response.json();
+    })
+    .then((object) => {
+      // TODO: this will likely return a message after successfully deleting the record
+      console.log(task);
+      // re-render list after fetch to update
+      deleteJsTaskObject(task);
+      renderTaskList(activeProject.tasks);
+    })
+    .catch((errors) => {
+      alert(errors);
+    });
+}
+
+function deleteJsTaskObject(task) {
+  activeProject.tasks;
+  // delete element from JS
+  document.getElementById(`task-${task.id}`).remove();
+  const newTaskArr = activeProject.tasks.filter((value) => {
+    return value !== task;
+  });
+  activeProject.tasks = newTaskArr;
 }
 /* 
 Things we need to do:
 create new project
-delete task
-
-
-shortcut buttons on each task line:
-	mark complete
-	schedule
-	edit
 */
 
 // TODO:

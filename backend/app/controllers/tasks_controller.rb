@@ -1,7 +1,7 @@
 class TasksController < ApplicationController
 
 	# index
-	# create
+
 	def create
 		task = Task.new(task_params)
 		# byebug
@@ -11,8 +11,17 @@ class TasksController < ApplicationController
 			render json: task.errors, status: :unprocessable_entity
 		end
 	end
-	# show
-	# update
+
+	def show
+		task = Task.find_by(id: params[:id])
+
+		if task
+			render json: task
+		else
+			render plain: "Task not found"
+		end
+	end
+
 	def update
 		task = Task.find(params[:id])
 		task.name = params[:task][:name]
@@ -28,7 +37,14 @@ class TasksController < ApplicationController
 			render json: task.errors, status: :unprocessable_entity
 		end
 	end
-	# delete
+
+	def destroy
+		task = Task.find(params[:id])
+		# task.delete
+		if task.delete 
+			render json: {message: 'Task has been successfully yeeted'}
+		end
+	end
 
 	private
 
