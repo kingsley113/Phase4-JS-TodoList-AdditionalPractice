@@ -11,6 +11,14 @@ let userList;
 let username;
 let users = [];
 
+// Task Form
+let taskForm;
+let taskName;
+
+// Project Form
+let projectForm;
+let projectName;
+
 // declare classes
 class Task {
   constructor(
@@ -86,6 +94,10 @@ document.addEventListener("DOMContentLoaded", (event) => {
   taskForm = document.getElementById("new-task-form");
   taskName = document.getElementById("new-task-name");
 
+  // Project form elements
+  projectForm = document.getElementById("new-project-form");
+  projectName = document.getElementById("new-project-name");
+
   initialize();
 });
 
@@ -104,6 +116,11 @@ function initialize() {
     event.preventDefault();
     // console.log(taskName.value);
     createNewTask(taskName.value);
+  });
+
+  projectForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    createNewProject(projectName.value);
   });
 }
 
@@ -198,6 +215,7 @@ function setCurrentUser(userObject) {
     buildProjects(userObject.projects),
     userObject.id
   );
+  // TODO:
 
   updateFooter();
   renderProjectList();
@@ -231,8 +249,14 @@ function buildProjects(projArray) {
 }
 
 function renderProjectList() {
+  // remove existing list elements
+  const projects = document.querySelectorAll(".project-li");
+  for (const project of projects) {
+    project.remove();
+  }
+  // create new elements
   const projectList = document.getElementById("project-sidebar-list");
-
+  console.log("fucking work!!!!" + currentUser.projects);
   for (const project of currentUser.projects) {
     projectList.appendChild(buildProjectLiElement(project));
   }
@@ -262,6 +286,14 @@ function buildProjectLiElement(project) {
 function setActiveProject(project) {
   activeProject = project;
   fetchProjectTasks.call(activeProject);
+  // Remove the "active" class tag
+  for (const project of document.querySelectorAll(".project-li")) {
+    project.classList.remove("active");
+  }
+
+  // Add the "active" class tag on currently active project
+  const activatedProject = document.getElementById(`project-${project.id}`);
+  activatedProject.classList.add("active");
   // renderTaskList(activeProject);
 }
 
@@ -476,12 +508,9 @@ function deleteTask(task) {
 
   fetch(`http://localhost:3000/tasks/${task.id}`, configurationObject)
     .then((response) => {
-      // TODO:check for bug here
       response.json();
     })
     .then((object) => {
-      // TODO: this will likely return a message after successfully deleting the record
-      console.log(task);
       // re-render list after fetch to update
       deleteJsTaskObject(task);
       renderTaskList(activeProject.tasks);
@@ -500,9 +529,54 @@ function deleteJsTaskObject(task) {
   });
   activeProject.tasks = newTaskArr;
 }
+
+function createNewProject(name) {
+  const project = new Project(name);
+  project.user = currentUser;
+
+  saveNewProjectToAPI(project);
+}
+
+function saveNewProjectToAPI(project) {
+  const formData = {
+    name: project.name,
+    user_id: currentUser.id,
+  };
+  // console.log(formData);
+  const configurationObject = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({ project: formData }),
+  };
+
+  fetch(`http://localhost:3000/projects`, configurationObject)
+    .then((response) => {
+      return response.json();
+    })
+    .then((object) => {
+      project.id = object.id;
+      console.log(
+        "Current User Projects from inside fetch: " + currentUser.projects
+      );
+      addNewProjectToCurrentUser(project);
+      // set the current project to new project
+      renderProjectList();
+      // buildProjects(currentUser.projects);
+      setActiveProject(project);
+    });
+}
+
+function addNewProjectToCurrentUser(project) {
+  // const projects = currentUser.projects;
+  currentUser.projects.push(project);
+}
 /* 
 Things we need to do:
 create new project
+highlight active project on list
 */
 
 // TODO:

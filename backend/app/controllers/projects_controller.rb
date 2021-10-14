@@ -2,11 +2,23 @@ class ProjectsController < ApplicationController
 
 	# index
 	# create
+	def create
+		project = Project.new(project_params)
+		if project.save
+			render json: project, include: [:tasks]
+		else
+			render json: project.errors, status: :unprocessable_entity
+		end
+	end
 	# show
 	def show
-		project = Project.find(params[:id])
+		project = Project.find_by(id: params[:id])
 
-		render json: project, include: [:tasks]
+		if project
+			render json: project, include: [:tasks]
+		else
+			render plain: "Project not found"
+		end
 	end
 	# update
 	# delete

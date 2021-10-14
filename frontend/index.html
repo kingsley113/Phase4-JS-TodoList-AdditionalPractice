@@ -15,7 +15,19 @@
       <div class="project-bar">
         <h2>Project List</h2>
         <ul class="project-list" id="project-sidebar-list"></ul>
+        <div id="project-form-container">
+          <form id="new-project-form">
+            <label for="new-project-name">Name: </label>
+            <input type="text" id="new-project-name" name="new-project-name" />
+            <input
+              type="submit"
+              value="Create Project"
+              id="submit-project-btn"
+            />
+          </form>
+        </div>
       </div>
+
       <div class="task-area">
         <div class="top-menu-bar">
           <form id="new-task-form">
