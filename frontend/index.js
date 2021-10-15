@@ -106,11 +106,11 @@ function initialize() {
   if (currentUser === null) {
     showUserModal();
   }
-  // TODO: make this trigger without button, keep button for debug only
-  // btn.addEventListener("click", () => {
-  //   userModal.style.display = "block";
-  //   showUserModal();
-  // });
+  // Switch User button
+  btn.addEventListener("click", () => {
+    userModal.style.display = "block";
+    showUserModal();
+  });
 
   taskForm.addEventListener("submit", (event) => {
     event.preventDefault();
