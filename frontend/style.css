@@ -16,6 +16,14 @@ main {
   flex: 1;
 }
 
+#title {
+  float: right;
+  margin-left: auto;
+  margin-right: 20px;
+  font-size: 40px;
+  font-style: oblique;
+  text-decoration: underline;
+}
 /* Project List */
 .project-bar {
   width: 300px;
