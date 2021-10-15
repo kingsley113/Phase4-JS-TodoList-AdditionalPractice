@@ -96,7 +96,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
 });
 
 function initialize() {
-  // console.log(currentUser);
   if (currentUser === null) {
     showUserModal();
   }
@@ -108,7 +107,6 @@ function initialize() {
 
   taskForm.addEventListener("submit", (event) => {
     event.preventDefault();
-    // console.log(taskName.value);
     createNewTask(taskName.value);
   });
 
@@ -481,7 +479,6 @@ function deleteTask(task) {
     })
     .then((object) => {
       // re-render list after fetch to update
-      console.log(object);
       deleteJsTaskObject(task);
       renderTaskList(activeProject.tasks);
       alert(object.message);
@@ -528,9 +525,6 @@ function saveNewProjectToAPI(project) {
     })
     .then((object) => {
       project.id = object.id;
-      console.log(
-        "Current User Projects from inside fetch: " + currentUser.projects
-      );
       addNewProjectToCurrentUser(project);
       // set the current project to new project
       renderProjectList();
