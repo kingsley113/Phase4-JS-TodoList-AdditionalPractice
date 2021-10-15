@@ -36,7 +36,9 @@
             <input type="submit" value="Create Task" id="submit-task-btn" />
           </form>
         </div>
-        <h2>Current Tasks:</h2>
+        <div id="task-header">
+          <h2>Current Tasks</h2>
+        </div>
         <div class="task-list">
           <ul class="task-items-list" id="task-items-list"></ul>
         </div>
@@ -54,8 +56,6 @@
           <select name="existing-users" id="existing-users"></select>
           <input type="submit" value="Create or Load User" />
         </form>
-        User Modal Text Here!!!
-        <!-- <span class="close" id="close-user-modal">&times;</span> -->
       </div>
     </div>
 
@@ -88,8 +88,10 @@
       </div>
     </div>
     <footer class="btm-menu-bar">
-      <p id="current-user-footer-label">No Loaded User</p>
-      <button id="open-modal">Open Modal Test</button>
+      <span id="current-user-footer-label">No Loaded User</span>
+      <span id="switch-user-container">
+        <button id="open-modal">Switch User</button>
+      </span>
     </footer>
   </body>
 </html>
