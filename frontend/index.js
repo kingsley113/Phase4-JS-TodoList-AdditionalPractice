@@ -1,3 +1,5 @@
+// Task Yeeter frontend JS Script
+
 // declare any global variables
 let currentUser = null;
 let activeProject = null;
@@ -69,14 +71,6 @@ class User {
     this.name = name;
     this.projects = projects;
   }
-
-  // name() {
-  //   return this._name;
-  // }
-
-  // setName(name) {
-  //   this._name = name;
-  // }
 }
 
 // Identify page elements
@@ -148,12 +142,18 @@ function fetchUsers() {
 }
 
 function populateUserFormList(users) {
+  // remove existing to not duplicate list
+  const userOptions = document.querySelectorAll(".user-option");
+  for (const user of userOptions) {
+    user.remove();
+  }
   // create option elements
   for (const user of users) {
     const option = document.createElement("option");
     option.id = user.id;
     option.value = user.id;
     option.innerText = user.username;
+    option.classList.add("user-option");
 
     // append option elements
     userList.appendChild(option);
@@ -162,14 +162,9 @@ function populateUserFormList(users) {
 
 function handleUserFormSubmit(event) {
   event.preventDefault();
-  // console.log(username.value);
   if (username.value !== "") {
-    // console.log("creating a new user");
     createNewUser(username.value);
   } else {
-    // console.log(
-    // `loading user ${document.getElementById("existing-users").value}`
-    // );
     loadExistingUser(document.getElementById("existing-users").value);
   }
 }
@@ -215,12 +210,12 @@ function setCurrentUser(userObject) {
     buildProjects(userObject.projects),
     userObject.id
   );
-  // TODO:
 
   updateFooter();
   renderProjectList();
-  // console.log(currentUser.projects[0]);
-  setActiveProject(currentUser.projects[0]);
+  if (currentUser.projects.length !== 0) {
+    setActiveProject(currentUser.projects[0]);
+  }
 }
 
 function updateFooter() {
@@ -256,7 +251,6 @@ function renderProjectList() {
   }
   // create new elements
   const projectList = document.getElementById("project-sidebar-list");
-  console.log("fucking work!!!!" + currentUser.projects);
   for (const project of currentUser.projects) {
     projectList.appendChild(buildProjectLiElement(project));
   }
@@ -265,17 +259,12 @@ function renderProjectList() {
 function buildProjectLiElement(project) {
   let item = document.createElement("li");
   let text = document.createElement("h3");
-  // let unfinishedTaskText = document.createElement("span");
 
   item.id = `project-${project.id}`;
   item.classList.add("project-li");
 
   text.innerText = project.name;
   item.appendChild(text);
-
-  // unfinishedTaskText.innerText = project.incompleteTasks().length;
-  // console.log(project.incompleteTasks().length);
-  // item.appendChild(unfinishedTaskText);
 
   item.addEventListener("click", () => {
     setActiveProject(project);
@@ -294,20 +283,15 @@ function setActiveProject(project) {
   // Add the "active" class tag on currently active project
   const activatedProject = document.getElementById(`project-${project.id}`);
   activatedProject.classList.add("active");
-  // renderTaskList(activeProject);
 }
 
 function renderTaskList(taskArr) {
   // remove existing task elements
-  // console.log(taskArr);
   const existTasks = document.querySelectorAll(".task-item");
   for (const taskEl of existTasks) {
     taskEl.remove();
   }
-  // console.log(projectObject);
   const taskList = document.getElementById("task-items-list");
-  // const tasks = fetchProjectTasks.call(activeProject);
-  // console.log(taskArr);
   for (const task of taskArr) {
     taskList.appendChild(buildTaskElement(task));
   }
@@ -319,11 +303,8 @@ function fetchProjectTasks() {
       return response.json();
     })
     .then((object) => {
-      // console.log("from fetch: " + object.tasks[0]);
       renderTaskList(object.tasks);
-      // TODO: need to tie tasks to project, currently this relationship is only on the backend DB
       this.tasks = object.tasks;
-      // console.log(this);
     });
 }
 
@@ -332,9 +313,7 @@ function buildTaskElement(task) {
   const listItem = document.createElement("li");
   listItem.classList.add("task-item");
   listItem.id = `task-${task.id}`;
-  listItem.addEventListener("click", () => {
-    // console.log("you clicked a task!");
-  });
+  listItem.addEventListener("click", () => {});
   // create name text element
   const text = document.createElement("span");
   text.classList.add("task-text");
@@ -400,8 +379,6 @@ function showEditModal(taskObject) {
     // Submit fetch request to update object on backend
     submitTaskToAPI(taskObject);
   });
-
-  // TODO: Add cancel button?
 }
 
 function submitTaskToAPI(task) {
@@ -423,7 +400,6 @@ function submitTaskToAPI(task) {
     body: JSON.stringify({ task: formData }),
   };
 
-  // TODO: bug here with patch request
   fetch(`http://localhost:3000/tasks/${task.id}`, configurationObject)
     .then((response) => {
       return response.json();
@@ -449,13 +425,10 @@ function createNewTask(name) {
 function saveNewTaskToAPI(task) {
   const formData = {
     name: task.name,
-    // description: task.description,
     priority: task.priority,
     project_id: activeProject.id,
-    // dueDate: task.dueDate,
     complete: task.complete,
   };
-  // console.log(formData);
   const configurationObject = {
     method: "POST",
     headers: {
@@ -483,15 +456,11 @@ function completeTask(task, text) {
     task.complete = false;
     text.classList.remove("complete");
   }
-  // task.complete = true;
   // update on API
-  // console.log(task);
   submitTaskToAPI(task);
 }
 
 function deleteTask(task) {
-  // TODO:
-  // delete element from API
   const formData = {
     name: task.name,
     id: task.id,
@@ -522,7 +491,7 @@ function deleteTask(task) {
 
 function deleteJsTaskObject(task) {
   activeProject.tasks;
-  // delete element from JS
+  // delete element from JS frontend
   document.getElementById(`task-${task.id}`).remove();
   const newTaskArr = activeProject.tasks.filter((value) => {
     return value !== task;
@@ -542,7 +511,6 @@ function saveNewProjectToAPI(project) {
     name: project.name,
     user_id: currentUser.id,
   };
-  // console.log(formData);
   const configurationObject = {
     method: "POST",
     headers: {
@@ -564,21 +532,10 @@ function saveNewProjectToAPI(project) {
       addNewProjectToCurrentUser(project);
       // set the current project to new project
       renderProjectList();
-      // buildProjects(currentUser.projects);
       setActiveProject(project);
     });
 }
 
 function addNewProjectToCurrentUser(project) {
-  // const projects = currentUser.projects;
   currentUser.projects.push(project);
 }
-/* 
-Things we need to do:
-create new project
-highlight active project on list
-*/
-
-// TODO:
-// stop user list from duplicating rows when switching users
-// getting 500 server error if editing task twice without reloading page
