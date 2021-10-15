@@ -330,7 +330,7 @@ function buildTaskElement(task) {
   // Create delete task button
   const deleteBtn = document.createElement("button");
   deleteBtn.classList.add("del-button");
-  deleteBtn.innerHTML = "Delete";
+  deleteBtn.innerHTML = "Yeet";
   listItem.appendChild(deleteBtn);
   deleteBtn.addEventListener("click", () => {
     deleteTask(task);
@@ -477,12 +477,14 @@ function deleteTask(task) {
 
   fetch(`http://localhost:3000/tasks/${task.id}`, configurationObject)
     .then((response) => {
-      response.json();
+      return response.json();
     })
     .then((object) => {
       // re-render list after fetch to update
+      console.log(object);
       deleteJsTaskObject(task);
       renderTaskList(activeProject.tasks);
+      alert(object.message);
     })
     .catch((errors) => {
       alert(errors);
