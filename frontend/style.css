@@ -160,6 +160,7 @@ main {
 
 .complete {
   text-decoration: line-through;
+  color: rgb(121, 120, 120);
 }
 
 /* New project form */
